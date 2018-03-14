@@ -5,6 +5,6 @@ from python.sim.Agent import Agent
 import matplotlib.collections as collections
 import matplotlib.pyplot as plt
 
-N = 8
+N = 10
 sim = Simulator([Agent()] * N, N)
 sim.mult_steps(100000)

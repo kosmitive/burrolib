@@ -13,7 +13,7 @@ class Simulator:
         self.current_step = 0
 
         # define a dirichlet poisson process
-        self.process = DiscretePoissonProcess(17)
+        self.process = DiscretePoissonProcess(2.5)
 
         # define the data structure
         self.current_supply = 5 * np.ones([N], np.int32)
@@ -159,21 +159,23 @@ class Simulator:
             if k == 0:
                 plt.text(left[k] + 0.5 * box_width, 0.9, "Gen:",
                          fontsize=fs * golden_ratio,
-                         color='darkred', ha='center', va='center')
+                         color='black', ha='center', va='center')
                 plt.text(left[k] + 0.5 * box_width, 0.8, "Sum:", fontsize=fs * golden_ratio,
-                         color='darkred', ha='center', va='center')
+                         color='black', ha='center', va='center')
+                plt.text(left[k] + 0.5 * box_width, bottom + 0.5 * box_height, "∞",
+                         fontsize=fs, ha='center', va='center')
 
             if 0 < k < N + 1:
                 plt.text(left[k] + 0.5 * box_width, bottom + 0.5 * box_height, str(self.current_supply[k - 1]),
                          fontsize=fs, ha='center', va='center')
-                plt.text(left[k] + 0.5 * box_width, 0.9, str(self.generated_costs[k - 1]) + "$", fontsize=fs * golden_ratio,
+                plt.text(left[k] + 0.5 * box_width, 0.9, str(self.generated_costs[k - 1]) + "€", fontsize=fs * golden_ratio,
                          color='darkred', ha='center', va='center')
-                plt.text(left[k] + 0.5 * box_width, 0.8, str(self.costs[k - 1]) + "$", fontsize=fs * golden_ratio,
+                plt.text(left[k] + 0.5 * box_width, 0.8, str(self.costs[k - 1]) + "€", fontsize=fs * golden_ratio,
                          color='darkred', ha='center', va='center')
 
         plt.title("SCM-SIM [" + str(self.current_step) + "]")
         plt.text(0.5, 0.15,
-                 "Costs: " + str(np.sum(self.costs)) + "$",
+                 "Costs: " + str(np.sum(self.costs)) + "€",
                  fontsize=fs, color='darkred', ha='center', va='center')
 
         plt.axhline(y=0.7, linestyle='--', color='black')
