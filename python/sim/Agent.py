@@ -3,5 +3,5 @@ can be used as this will be used inside the simulation to drive the
 different goods."""
 class Agent:
 
-    def getOutgoingOrders(self, supply, deliveries):
+    def getOutgoingOrders(self, pos, supply, deliveries):
         return 30
