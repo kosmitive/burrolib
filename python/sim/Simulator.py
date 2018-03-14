@@ -1,6 +1,6 @@
 import numpy as np
-from sim.DiscretePoissonProcess import DiscretePoissonProcess
-from sim.Agent import Agent
+from python.sim.DiscretePoissonProcess import DiscretePoissonProcess
+from python.sim.Agent import Agent
 
 
 class Simulator:
@@ -41,7 +41,8 @@ class Simulator:
         # place the end consumer order
         self.orders[-1] += new_orders
         print("End Order: ", self.cost)
-        self.orders[:-1] += [self.agents[k].getOutgoingOrders(self.current_supply[k], self.orders[k + 1]) for k in range(self.N)]
+        self.orders[:-1] += [self.agents[k].getOutgoingOrders(k, self.current_supply[k], self.orders[k + 1])
+                             for k in range(self.N)]
 
         # update current supply
         self.running_deliveries[0] = self.orders[0]
@@ -52,4 +53,4 @@ class Simulator:
     def mult_steps(self, steps):
         """Performs multiple steps using the one step method."""
 
-        [self.one_step() for k in range(steps)]
+        [self.one_step() for _ in range(steps)]

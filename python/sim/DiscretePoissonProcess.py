@@ -1,4 +1,4 @@
-from util.sampling import exp_sample
+from python.util.sampling import exp_sample
 
 
 class DiscretePoissonProcess:
