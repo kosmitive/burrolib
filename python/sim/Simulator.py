@@ -41,7 +41,7 @@ class Simulator:
         # place the end consumer order
         self.orders[-1] += new_orders
         print("End Order: ", self.cost)
-        self.orders[:-1] += [self.agents[k].getOutgoingOrders(k, self.current_supply[k], self.orders[k + 1])
+        self.orders[:-1] += [self.agents[k].get_outgoing_orders(k, self.current_supply[k], self.orders[k + 1])
                              for k in range(self.N)]
 
         # update current supply

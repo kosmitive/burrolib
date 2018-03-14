@@ -1,7 +1,7 @@
 import numpy as np
-from sim.DiscretePoissonProcess import DiscretePoissonProcess
-from sim.Simulator import Simulator
-from sim.Agent import Agent
+from python.sim.DiscretePoissonProcess import DiscretePoissonProcess
+from python.sim.Simulator import Simulator
+from python.sim.Agent import Agent
 import matplotlib.collections as collections
 import matplotlib.pyplot as plt
 
