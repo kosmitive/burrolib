@@ -15,8 +15,12 @@ pip install numpy matplotlib
 
 To start the agent simply run the following:
 ```
-cd burro
-python src/examples/run_refill_agent.py
+python examples/run_refill_agent.py
+```
+
+# Install burro as pip package
+```
+pip install -e .
 ```
 
 ## Contributors
