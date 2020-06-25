@@ -1,8 +1,17 @@
-class Agent:
+from abc import ABC, abstractmethod
+
+
+class Agent(ABC):
     """Represents an interface for one agent. Different implementations
     can be used as this will be used inside the simulation to drive the
     different goods."""
 
+    @abstractmethod
+    def clone(self):
+        """Clone the agent instance."""
+        pass
+
+    @abstractmethod
     def get_outgoing_orders(self, pos, clen, stock, iorders, oorders, costs):
         """This method should calculate outgoing orders. Therefore several information is
         about itself is available.
@@ -16,4 +25,4 @@ class Agent:
 
         :return: How much should be ordered from (pos - 1)
         """
-        return 3 if stock < 8 else 0
+        pass
