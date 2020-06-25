@@ -23,4 +23,4 @@ python src/examples/run_refill_agent.py
 
 [Markus Semmler](https://github.com/kosmitive/ )
 
-[Thomas Lautenschläger](https://github.com/kosmitive/ )
+[Thomas Lautenschläger](https://github.com/thlautenschlaeger/ )
