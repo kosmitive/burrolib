@@ -1,5 +1,4 @@
 import numpy as np
-from python.sim.DiscretePoissonProcess import DiscretePoissonProcess
 import matplotlib.pyplot as plt
 
 
@@ -7,13 +6,11 @@ class Simulator:
     """This class represents a simple simulator. It uses the defined
     agent interface to run the simulation."""
 
-    def __init__(self, agents, N = 8):
+    def __init__(self, agents, process, N=4):
         self.N = N
         self.outstanding = 0
         self.current_step = 0
-
-        # define a dirichlet poisson process
-        self.process = DiscretePoissonProcess(2.5)
+        self.process = process
 
         # define the data structure
         self.current_supply = 5 * np.ones([N], np.int32)
@@ -23,7 +20,12 @@ class Simulator:
         self.generated_costs = np.zeros([N])
         self.generated_delay_costs = np.zeros([N])
 
-        assert isinstance(agents, list)
+        # clone agents if necessary
+        if not isinstance(agents, list):
+            agents = [agents.clone() for _ in range(N)]
+
+        # check length and save internally
+        assert len(agents) == N
         self.agents = agents
 
         # init the plot
@@ -104,13 +106,15 @@ class Simulator:
         # plot
         self.current_step += 1
         self.plot_frame()
+        return np.sum(self.generated_costs)
 
     def mult_steps(self, steps):
         """Performs multiple steps using the one step method."""
 
-        [self.one_step() for _ in range(steps)]
+        res = np.asarray([self.one_step() for _ in range(steps)])
         plt.ioff()
-        plt.show()
+        plt.show(block=False)
+        return res
 
     def plot_frame(self):
 

@@ -1,4 +1,4 @@
-from python.util.sampling import exp_sample
+from src.util.sampling import exp_sample
 
 
 class DiscretePoissonProcess:
@@ -9,17 +9,16 @@ class DiscretePoissonProcess:
     def __init__(self, lamb):
         """Initialize the process. Simply save the lambda internally."""
         self.lamb = lamb
-        self.current_step = 0
         self.overhang_time = 0
 
-    def get_discrete_increase(self, steps = 1):
+    def get_discrete_increase(self, steps=1):
         """This method gets the number of events
         which occured between the timestep the method
         was last called, and the timestep lying steps
         in the future."""
 
         # precondition
-        n = int(self.current_step > 0)
+        n = 0
 
         # loop body
         while True:
