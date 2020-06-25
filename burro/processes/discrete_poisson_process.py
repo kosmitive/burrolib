@@ -1,4 +1,4 @@
-from src.util.sampling import exp_sample
+from burro.util.sampling import exp_sample
 
 
 class DiscretePoissonProcess:

@@ -1,4 +1,4 @@
-from src.agents.agent import Agent
+from burro.agents.agent import Agent
 
 
 class RefillAgent(Agent):
