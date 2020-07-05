@@ -8,6 +8,6 @@ setup(name='burro',
       description='burro - a supply chain simulator',
       author='Markus Semmler, Thomas Lautenschlaeger',
       author_email='dev@xploras.net',
-      install_requires=['numpy', 'matplotlib'],
+      install_requires=['numpy', 'matplotlib', 'torch'],
       packages=['burro'],
       include_dirs=[np.get_include()],)
