@@ -32,7 +32,7 @@ class CategoricalAgent(Agent):
         new_oorders = self.policy_model.act(state)
         self.oorders_batch[self.batch_fill_count] = torch.from_numpy(new_oorders)
         self.states_batch[self.batch_fill_count] = state
-        self.reward_batch[self.batch_fill_count] = costs # (torch.eye(self.max_order_size)[iorders] - train_orders).mean()
+        self.reward_batch[self.batch_fill_count] = -costs # (torch.eye(self.max_order_size)[iorders] - train_orders).mean()
         self.batch_fill_count += 1
         if self.batch_fill_count >= self.batch_size:
             discounted_reward = discount(self.reward_batch.numpy(), self.gamma)
