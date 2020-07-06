@@ -23,7 +23,8 @@ class CategoricalAgent(Agent):
         self.vf_epochs = vf_epochs
 
     def clone(self):
-        return CategoricalAgent(deepcopy(self.policy_model), batch_size=self.batch_size)
+        return CategoricalAgent(deepcopy(self.policy_model), gamma=self.gamma, batch_size=self.batch_size,
+                                vf_epochs=self.vf_epochs)
 
     def get_outgoing_orders(self, pos, clen, stock, iorders, oorders, costs):
         state = torch.stack([torch.tensor(stock, dtype=torch.float32), torch.tensor(iorders, dtype=torch.float32),
@@ -38,7 +39,7 @@ class CategoricalAgent(Agent):
             discounted_reward = torch.cat([torch.tensor(dr) for dr in discounted_reward])
             self.batch_fill_count = 0
             self.update_vf(self.states_batch, discounted_reward)
-            advantage = self.policy_model.vf_net(self.states_batch) - discounted_reward
+            advantage = discounted_reward - self.policy_model.vf_net(self.states_batch)
             self.update_policy(self.states_batch, advantage, self.oorders_batch)
 
         return new_oorders

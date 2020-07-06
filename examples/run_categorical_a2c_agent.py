@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 
 # initalize policy model
 cat_policy = CategoricalPolicyModel(io_order_dim=3, max_order_size=20,
-                                    p_hidden_size=(256, 256),
-                                    vf_hidden_size=(256, 256))
+                                    p_hidden_size=(64, 64, 64),
+                                    vf_hidden_size=(64, 64, 64))
 
 # setup simulator and agent
 N = 4
@@ -22,8 +22,9 @@ process = DiscretePoissonProcess(2.5)
 plot_steps = 500
 
 for i in range(10000):
-    sim = Simulator(CategoricalAgent(cat_policy, gamma=0.99, batch_size=100), process=process, N=N)
-    costs = sim.mult_steps(100)
+    sim = Simulator(CategoricalAgent(cat_policy, gamma=0.99, batch_size=50), process=process, N=N)
+    costs = sim.mult_steps(50)
+
     print(costs)
 
     # display a plot

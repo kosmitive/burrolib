@@ -84,9 +84,9 @@ class Simulator:
         self.current_supply += self.running_deliveries[:-1]
 
         new_orders = self.process.get_discrete_increase()
-        print("Supply: ", self.current_supply)
-        print("Orders: ", self.orders, " -> ", new_orders)
-        print("Cost: ", self.costs)
+        # print("Supply: ", self.current_supply)
+        # print("Orders: ", self.orders, " -> ", new_orders)
+        # print("Cost: ", self.costs)
 
         # add cost
         self.generated_delay_costs = self.orders[1:] * 1.0
@@ -94,7 +94,7 @@ class Simulator:
 
         # place the end consumer order
         self.orders[-1] += new_orders
-        print("End Order: ", self.costs)
+        # print("End Order: ", self.costs)
         self.orders[:-1] += [self.agents[k].get_outgoing_orders(k, self.N, self.current_supply[k],
                                                                 self.orders[k + 1], self.orders[k], self.generated_costs[k])
                              for k in range(self.N)]
@@ -112,7 +112,7 @@ class Simulator:
             self.plot_frame()
         return np.sum(self.generated_costs)
 
-    def mult_steps(self, steps):
+    def mult_steps(self, steps: int) -> np.ndarray:
         """Performs multiple steps using the one step method."""
 
         res = np.asarray([self.one_step() for _ in range(steps)])
