@@ -15,6 +15,8 @@ def exp_sample(lamb):
     x = m.log(1 - u) / lamb
     return -x
 
+
 def pp_disc_incr_sample(lamb):
     """Samples the increase for discrete timesteps t, where
     it basically counts the elements"""
+    pass

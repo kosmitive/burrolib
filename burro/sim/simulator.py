@@ -6,11 +6,12 @@ class Simulator:
     """This class represents a simple simulator. It uses the defined
     agent interface to run the simulation."""
 
-    def __init__(self, agents, process, N=4):
+    def __init__(self, agents, process, N=4, plot=False):
         self.N = N
         self.outstanding = 0
         self.current_step = 0
         self.process = process
+        self.plot = plot
 
         # define the data structure
         self.current_supply = 5 * np.ones([N], np.int32)
@@ -29,9 +30,10 @@ class Simulator:
         self.agents = agents
 
         # init the plot
-        self.fig, self.ax = plt.subplots(figsize=(16, 8))
-        plt.ion()
-        plt.show()
+        if self.plot:
+            self.fig, self.ax = plt.subplots(figsize=(16, 8))
+            plt.ion()
+            plt.show()
 
         # create colors
         red = [111, 195]
@@ -54,7 +56,8 @@ class Simulator:
         self.box_height = 1 / self.height
         self.fs = 245 * self.box_height
 
-        self.plot_frame()
+        if self.plot:
+            self.plot_frame()
 
     def create_gradient(self, red, green, blue):
         """
@@ -105,15 +108,17 @@ class Simulator:
 
         # plot
         self.current_step += 1
-        self.plot_frame()
+        if self.plot:
+            self.plot_frame()
         return np.sum(self.generated_costs)
 
-    def mult_steps(self, steps):
+    def mult_steps(self, steps: int) -> np.ndarray:
         """Performs multiple steps using the one step method."""
 
         res = np.asarray([self.one_step() for _ in range(steps)])
-        plt.ioff()
-        plt.show(block=False)
+        if self.plot:
+            plt.ioff()
+            plt.show(block=False)
         return res
 
     def plot_frame(self):
