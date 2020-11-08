@@ -16,7 +16,7 @@ class Agent(ABC):
     def sync(self): pass
 
     @abstractmethod
-    def act(self, *args):
+    def act(self, state):
         """This method should calculate outgoing orders. Therefore several information is
         about itself is available.
 

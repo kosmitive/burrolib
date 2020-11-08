@@ -13,6 +13,6 @@ class RefillAgent(Agent):
 
     def sync(self): pass
 
-    def act(self, *args):
-        supply, orders, transported = args
+    def act(self, state):
+        supply, orders, transported = list(state)
         return self.amount if supply < self.limit else 0
