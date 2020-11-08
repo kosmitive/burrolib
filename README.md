@@ -1,6 +1,6 @@
 # burro
 
-[![Build Status](https://travis-ci.org/kosmitive/burro.png?branch=feature/new-agent-interface)](https://travis-ci.org/kosmitive/burro)
+[![Build Status](https://travis-ci.org/kosmitive/burro.png?branch=master)](https://travis-ci.org/kosmitive/burro)
 
 # Supply chain simulations / Beer game
 
@@ -31,4 +31,4 @@ pip install -e .
 
 [Markus Semmler](https://github.com/kosmitive/ )
 
-[Thomas Lautenschläger](https://github.com/kosmitive/ )
+[Thomas Lautenschläger](https://github.com/thlautenschlaeger/ )
