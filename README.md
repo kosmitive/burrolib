@@ -1,6 +1,6 @@
 # burro
 
-[![Build Status](https://travis-ci.org/joegattnet/joegattnet_v3.png?branch=feature/new-agent-interface)][travis]
+[![Build Status](https://travis-ci.org/kosmitive/burro.png?branch=feature/new-agent-interface)][travis]
 
 # Supply chain simulations / Beer game
 
