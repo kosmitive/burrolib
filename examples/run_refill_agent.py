@@ -5,4 +5,4 @@ from burro.run import run
 n_players = 3
 game = BeerGame(n_players, 5.0)
 agent_factory = lambda i: RefillAgent(3, 8)
-run(game, agent_factory, n_players=n_players)
+run(game, agent_factory, n_players=n_players, n_steps=100)

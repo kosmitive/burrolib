@@ -6,7 +6,14 @@ class Agent(ABC):
     can be used as this will be used inside the simulation to drive the
     different goods."""
 
+    @abstractmethod
     def experience(self, state, action, reward, nxt_state, done): pass
+
+    @abstractmethod
+    def train(self): pass
+
+    @abstractmethod
+    def sync(self): pass
 
     @abstractmethod
     def act(self, *args):

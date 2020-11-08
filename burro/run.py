@@ -1,13 +1,12 @@
 import numpy as np
 
-def run(game, agent_factory, n_players, render=False):
+def run(game, agent_factory, n_players, n_steps, render=False, n_sync_steps=10):
 
     agents = [agent_factory(i) for i in range(n_players)]
     observations = game.reset()
 
-    num_steps = 1000
-    sync_steps = 20
-    for k in range(num_steps):
+    # repeat
+    for k in range(n_steps):
 
         # obtain new action from each agent
         actions = np.asarray([agents[i].act(*list(observations[i])) for i in range(n_players)])
@@ -18,3 +17,8 @@ def run(game, agent_factory, n_players, render=False):
         for i in range(n_players):
             agent = agents[i]
             agent.experience(observations[i], actions[i], rewards[i], nxt_observations[i], done)
+
+            # train agent
+            agent.train()
+            if k % n_sync_steps:
+                agent.sync()
