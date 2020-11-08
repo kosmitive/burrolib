@@ -7,12 +7,16 @@ class Agent(ABC):
     different goods."""
 
     @abstractmethod
-    def clone(self):
-        """Clone the agent instance."""
-        pass
+    def experience(self, state, action, reward, nxt_state, done): pass
 
     @abstractmethod
-    def get_outgoing_orders(self, pos, clen, stock, iorders, oorders, costs):
+    def train(self): pass
+
+    @abstractmethod
+    def sync(self): pass
+
+    @abstractmethod
+    def act(self, state):
         """This method should calculate outgoing orders. Therefore several information is
         about itself is available.
 

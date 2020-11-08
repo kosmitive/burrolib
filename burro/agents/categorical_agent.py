@@ -2,9 +2,9 @@ import torch
 from torch import distributions
 from copy import deepcopy
 
-from burro.agents.agent import Agent
-from burro.policies.categorical_policy import CategoricalPolicyModel
-from burro.util.calc import discount
+from burro.agents import Agent
+from burro import CategoricalPolicyModel
+from burro import discount
 
 
 class CategoricalAgent(Agent):

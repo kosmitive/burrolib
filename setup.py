@@ -4,7 +4,7 @@ import numpy as np
 
 
 setup(name='burro',
-      version='0.0.1',
+      version='0.1',
       description='burro - a supply chain simulator',
       author='Markus Semmler, Thomas Lautenschlaeger',
       author_email='dev@xploras.net',

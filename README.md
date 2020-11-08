@@ -1,3 +1,7 @@
+# burro
+
+[![Build Status](https://travis-ci.org/kosmitive/burro.png?branch=feature/new-agent-interface)](https://travis-ci.org/kosmitive/burro)
+
 # Supply chain simulations / Beer game
 
 This is a small framework for supply chain simulations released by xploras. It is made such that each participant in the

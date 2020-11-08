@@ -7,8 +7,12 @@ class RefillAgent(Agent):
         self.amount = amount
         self.limit = limit
 
-    def clone(self):
-        return RefillAgent(self.amount, self.limit)
+    def experience(self, state, action, reward, nxt_state, done): pass
 
-    def get_outgoing_orders(self, pos, clen, stock, iorders, oorders, costs):
-        return self.amount if stock < self.limit else 0
+    def train(self): pass
+
+    def sync(self): pass
+
+    def act(self, state):
+        supply, orders, transported = list(state)
+        return self.amount if supply < self.limit else 0
