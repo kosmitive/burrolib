@@ -3,8 +3,8 @@ import sys
 sys.path.append(".")
 
 from burro.agents.categorical_agent import CategoricalAgent
-from burro.policies.categorical_policy import CategoricalPolicyModel
-from burro.processes.discrete_poisson_process import DiscretePoissonProcess
+from burro import CategoricalPolicyModel
+from burro.processes import DiscretePoissonProcess
 from burro.sim.simulator import Simulator
 
 import numpy as np

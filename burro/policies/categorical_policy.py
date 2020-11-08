@@ -2,11 +2,10 @@ import torch
 import torch.nn.functional as F
 from torch import distributions
 from torch import nn
-from torch.autograd import Variable
 from typing import Tuple
 
-from burro.policies.base_policy import BasePolicyModel
-from burro.util.nn import MLP
+from burro import BasePolicyModel
+from burro import MLP
 
 
 class GumbelPolicy(torch.nn.Module):

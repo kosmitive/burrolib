@@ -6,13 +6,10 @@ class Agent(ABC):
     can be used as this will be used inside the simulation to drive the
     different goods."""
 
-    @abstractmethod
-    def clone(self):
-        """Clone the agent instance."""
-        pass
+    def experience(self, state, action, reward, nxt_state, done): pass
 
     @abstractmethod
-    def get_outgoing_orders(self, pos, clen, stock, iorders, oorders, costs):
+    def act(self, *args):
         """This method should calculate outgoing orders. Therefore several information is
         about itself is available.
 
