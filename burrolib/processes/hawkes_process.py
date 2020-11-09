@@ -1,7 +1,7 @@
 import numpy as np
 
-from burro.processes.discrete_point_process import DiscretePointProcess
-from burro.util.type_checking import is_lambda
+from burrolib.processes.discrete_point_process import DiscretePointProcess
+from burrolib.util.type_checking import is_lambda
 
 
 class HawkesProcess(DiscretePointProcess):

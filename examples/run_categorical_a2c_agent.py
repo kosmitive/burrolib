@@ -1,13 +1,13 @@
 import sys
 from copy import deepcopy
 
-from burro.agents.categorical_agent import CategoricalAgent
-from burro.games.beer_game import BeerGame
+from burrolib.agents.categorical_agent import CategoricalAgent
+from burrolib.games.beer_game import BeerGame
 
 # sys.path.append(".")
 
-from burro.policies.categorical_policy import CategoricalPolicyModel
-from burro.run import run
+from burrolib.policies.categorical_policy import CategoricalPolicyModel
+from burrolib.run import run
 
 # Initalize policy model
 cat_policy = CategoricalPolicyModel(io_order_dim=3, max_order_size=5,

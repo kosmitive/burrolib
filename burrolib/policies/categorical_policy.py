@@ -4,8 +4,8 @@ from torch import distributions
 from torch import nn
 from typing import Tuple
 
-from burro.policies.base_policy import BasePolicyModel
-from burro.util.nn import MLP
+from burrolib.policies.base_policy import BasePolicyModel
+from burrolib.util.nn import MLP
 
 
 class GumbelPolicy(torch.nn.Module):

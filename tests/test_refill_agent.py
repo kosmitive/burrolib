@@ -1,6 +1,6 @@
-from burro.agents.refill_agent import RefillAgent
-from burro.games.beer_game import BeerGame
-from burro.run import run
+from burrolib.agents.refill_agent import RefillAgent
+from burrolib.games.beer_game import BeerGame
+from burrolib.run import run
 
 
 def test_run_refill_agent():
