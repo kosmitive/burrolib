@@ -23,7 +23,9 @@ class Agent(ABC):
     @abstractmethod
     def sync(self):
         """
-        Sync the trained agents with the game and use them.
+        Sync the agents,
+            e.g. copy over weights from target network
+            e.g. deleted old training data
         """
         pass
 
