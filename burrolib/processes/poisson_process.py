@@ -1,5 +1,5 @@
-from burro.processes.discrete_point_process import DiscretePointProcess
-from burro.util.sampling import exp_sample
+from burrolib.processes.discrete_point_process import DiscretePointProcess
+from burrolib.util.sampling import exp_sample
 
 
 class PoissonProcess(DiscretePointProcess):
@@ -38,5 +38,5 @@ class PoissonProcess(DiscretePointProcess):
             # count up by one
             n += 1
 
-        print("poisson generated ", n)
+        # print("poisson generated ", n)
         return n

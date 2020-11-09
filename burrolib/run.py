@@ -1,7 +1,7 @@
 import numpy as np
 
-def run(game, agent_factory, n_players, n_steps, render=False, n_sync_steps=10):
 
+def run(game, agent_factory, n_players, n_steps, render=False, n_sync_steps=10):
     agents = [agent_factory(i) for i in range(n_players)]
     observations = game.reset()
 

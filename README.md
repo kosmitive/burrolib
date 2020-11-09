@@ -1,11 +1,13 @@
 # burro
 
-[![Build Status](https://travis-ci.org/kosmitive/burro.png?branch=master)](https://travis-ci.org/kosmitive/burro)
+[![Build Status](https://travis-ci.org/kosmitive/burrolib.png?branch=develop)](https://travis-ci.org/kosmitive/burrolib?branch=develop)
+[![Documentation Status](https://readthedocs.org/projects/burrolib/badge/?version=latest)](https://burrolib.readthedocs.io/en/latest/?badge=latest)
 
 # Supply chain simulations / Beer game
 
-This is a small framework for supply chain simulations released by xploras. It is made such that each participant in the
-chain can not see the full information but has access to previous and following nodes.
+This repository provides a small framework for supply chain simulations released by xploras. The framework is designed 
+such that each participant in the chain can not see the full information but has access to previous and 
+following nodes.
 
 # Install necessary packages
 

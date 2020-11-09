@@ -19,4 +19,4 @@ def discount(x, gamma):
 
     """
     assert x.ndim >= 1
-    return scipy.signal.lfilter([1],[1,-gamma],x[::-1], axis=0)[::-1]
+    return scipy.signal.lfilter([1], [1, -gamma], x[::-1], axis=0)[::-1]
