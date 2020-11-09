@@ -7,13 +7,27 @@ class Agent(ABC):
     different goods."""
 
     @abstractmethod
-    def experience(self, state, action, reward, nxt_state, done): pass
+    def experience(self, state, action, reward, nxt_state, done):
+        """
+        Apply the agent to the environment and record the observations as experiences.
+        """
+        pass
 
     @abstractmethod
-    def train(self): pass
+    def train(self):
+        """
+        Train the agents from the new experiences.
+        """
+        pass
 
     @abstractmethod
-    def sync(self): pass
+    def sync(self):
+        """
+        Sync the agents,
+            e.g. copy over weights from target network
+            e.g. deleted old training data
+        """
+        pass
 
     @abstractmethod
     def act(self, state):
