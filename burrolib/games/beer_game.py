@@ -1,11 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from burro.processes.hawkes_process import HawkesProcess
-from burro.games.markov_game import MarkovGame
-from burro.processes.poisson_process import PoissonProcess
-from burro.util.colors import create_gradient
-from burro.common.enums import Colors
+from burrolib.processes.hawkes_process import HawkesProcess
+from burrolib.games.markov_game import MarkovGame
+from burrolib.processes.poisson_process import PoissonProcess
+from burrolib.util.colors import create_gradient
+from burrolib.common.enums import Colors
 
 
 class BeerGame(MarkovGame):
