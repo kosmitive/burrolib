@@ -1,6 +1,6 @@
 # burro
 
-[![Build Status](https://travis-ci.org/kosmitive/burrolib.png?branch=develop)](https://travis-ci.org/kosmitive/burro)
+[![Build Status](https://travis-ci.org/kosmitive/burrolib.png?branch=develop)](https://travis-ci.org/kosmitive/burrolib?branch=develop)
 [![Documentation Status](https://readthedocs.org/projects/burrolib/badge/?version=latest)](https://burrolib.readthedocs.io/en/latest/?badge=latest)
 
 # Supply chain simulations / Beer game
