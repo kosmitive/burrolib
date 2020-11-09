@@ -4,8 +4,9 @@
 
 # Supply chain simulations / Beer game
 
-This is a small framework for supply chain simulations released by xploras. It is made such that each participant in the
-chain can not see the full information but has access to previous and following nodes.
+This repository provides a small framework for supply chain simulations released by xploras. The framework is designed 
+such that each participant in the chain can not see the full information but has access to previous and 
+following nodes.
 
 # Install necessary packages
 

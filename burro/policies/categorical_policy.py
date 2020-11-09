@@ -4,8 +4,8 @@ from torch import distributions
 from torch import nn
 from typing import Tuple
 
-from burro import BasePolicyModel
-from burro import MLP
+from burro.policies.base_policy import BasePolicyModel
+from burro.util.nn import MLP
 
 
 class GumbelPolicy(torch.nn.Module):
@@ -33,7 +33,8 @@ class CategoricalPolicyModel(BasePolicyModel):
         self.vf_optim = torch.optim.Adam(self.vf_net.parameters(), lr=vf_lr)
 
     def act(self, state):
-        logits = self.policy_net(state)
+        # TODO: add wrapper to ensuer tensor
+        logits = self.policy_net(torch.from_numpy(state))
         out_orders = distributions.Categorical(logits=logits).sample()
         return out_orders.detach().numpy()
 

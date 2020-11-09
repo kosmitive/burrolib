@@ -2,9 +2,9 @@ import torch
 from torch import distributions
 from copy import deepcopy
 
-from burro.agents import Agent
-from burro import CategoricalPolicyModel
-from burro import discount
+from burro.agents.agent import Agent
+from burro.policies.categorical_policy import CategoricalPolicyModel
+from burro.util.calc import discount
 
 
 class CategoricalAgent(Agent):
@@ -12,45 +12,50 @@ class CategoricalAgent(Agent):
     def __init__(self, policy_model: CategoricalPolicyModel, gamma: float = 0.99,
                  batch_size: int = 100, vf_epochs: int = 25):
         super(CategoricalAgent, self).__init__()
-        self.policy_model = policy_model
+        self.policy_model = deepcopy(policy_model)
         self.max_order_size = self.policy_model.max_order_size
         self.batch_size = batch_size
         self.gamma = gamma
-        self.states_batch = torch.empty((self.batch_size, 3))
-        self.reward_batch = torch.zeros((self.batch_size, 1))
-        self.oorders_batch = torch.empty((self.batch_size, 1))
+        self.states_batch = torch.empty((self.batch_size, 3)).double()
+        self.reward_batch = torch.zeros((self.batch_size, 1)).double()
+        self.oorders_batch = torch.empty((self.batch_size, 1)).double()
         self.batch_fill_count = 0
         self.vf_epochs = vf_epochs
+        self.batch_filled = False
 
-    def clone(self):
+    def _clone(self):
         return CategoricalAgent(deepcopy(self.policy_model), gamma=self.gamma, batch_size=self.batch_size,
                                 vf_epochs=self.vf_epochs)
 
-    def get_outgoing_orders(self, pos, clen, stock, iorders, oorders, costs):
-        state = torch.stack([torch.tensor(stock, dtype=torch.float32), torch.tensor(iorders, dtype=torch.float32),
-                             torch.tensor(oorders, dtype=torch.float32)])
+    def experience(self, state, action, reward, nxt_state, done):
         new_oorders = self.policy_model.act(state)
         self.oorders_batch[self.batch_fill_count] = torch.from_numpy(new_oorders)
-        self.states_batch[self.batch_fill_count] = state
-        self.reward_batch[self.batch_fill_count] = -costs # (torch.eye(self.max_order_size)[iorders] - train_orders).mean()
+        self.states_batch[self.batch_fill_count] = torch.from_numpy(state)
+        # TODO: check costs
+        self.reward_batch[self.batch_fill_count] = state[2] - state[1]
         self.batch_fill_count += 1
         if self.batch_fill_count >= self.batch_size:
             discounted_reward = discount(self.reward_batch.numpy(), self.gamma)
             discounted_reward = torch.cat([torch.tensor(dr) for dr in discounted_reward])
             self.batch_fill_count = 0
             self.update_vf(self.states_batch, discounted_reward)
-            advantage = discounted_reward - self.policy_model.vf_net(self.states_batch)
-            self.update_policy(self.states_batch, advantage, self.oorders_batch)
+            self.advantage = (discounted_reward - self.policy_model.vf_net(self.states_batch)).detach()
+            self.batch_filled = True
 
-        return new_oorders
+    def act(self, state):
+        return self.policy_model.act(state)
 
-    def update_policy(self, states, advantage, oorders):
-        logits = self.policy_model.policy_net(states)
-        log_probs = torch.distributions.Categorical(logits=logits).log_prob(oorders)
-        loss = - (advantage * log_probs).mean()
-        self.policy_model.policy_optim.zero_grad()
-        loss.backward()
-        self.policy_model.policy_optim.step()
+    def sync(self):
+        pass
+
+    def train(self):
+        if self.batch_filled:
+            logits = self.policy_model.policy_net(self.states_batch)
+            log_probs = torch.distributions.Categorical(logits=logits).log_prob(self.oorders_batch)
+            loss = - (self.advantage * log_probs).mean()
+            self.policy_model.policy_optim.zero_grad()
+            loss.backward()
+            self.policy_model.policy_optim.step()
 
     def update_vf(self, states, reward):
         loss_fn = torch.nn.MSELoss()

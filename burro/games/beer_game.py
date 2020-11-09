@@ -5,14 +5,51 @@ from burro.processes.hawkes_process import HawkesProcess
 from burro.games.markov_game import MarkovGame
 from burro.processes.poisson_process import PoissonProcess
 from burro.util.colors import create_gradient
+from burro.common.enums import Colors
 
 
 class BeerGame(MarkovGame):
 
+    def __init__(self, chain_length, intensity, cost_storage=0.5, cost_delay=1.0, process='poisson'):
+        super().__init__(chain_length)
+
+        # create consumer process
+        if process == 'poisson':
+            self.consumer_process = PoissonProcess(intensity)
+        elif process == 'hawkes':
+            self.hawkes_process = HawkesProcess(intensity)
+
+        self.cost_storage = cost_storage
+        self.cost_delay = cost_delay
+        self.last_cost = 0
+        self.rendered = False
+        self.costs = np.zeros(chain_length)
+
+        # calc some drawing related things
+        self.fig = None
+        self.ax = None
+
+        self.c_colors = create_gradient(self.num_players, Colors.RED.value, Colors.GREEN.value, Colors.BLUE.value)
+
+        self.gr = 1.64
+        self.gr = 1 / self.gr
+        h_marg_multiple = self.num_players
+
+        self.width = self.num_players + (self.num_players + 3) * self.gr + 2
+        self.height = 1 + 2 * h_marg_multiple * self.gr
+        self.gr_w = self.gr / self.width
+        self.gr_h = self.gr / self.height
+
+        self.left = np.arange(self.num_players + 2) * (1 / self.width + self.gr_w) + self.gr_w
+        self.bottom = self.num_players * self.gr_h
+        self.box_width = 1 / self.width
+        self.box_height = 1 / self.height
+        self.fs = 245 * self.box_height
+
     def _state_emission(self, state, i):
 
         supply, orders, transported = state
-        return np.stack([supply[i], transported[i], orders[i+1]])
+        return np.stack([supply[i], transported[i], orders[i + 1]])
 
     def observation_dim(self, i):
         return 3
@@ -20,8 +57,8 @@ class BeerGame(MarkovGame):
     def _reset(self):
 
         return np.zeros(self.num_players), \
-               np.zeros(self.num_players+1), \
-               np.zeros(self.num_players+1)
+               np.zeros(self.num_players + 1), \
+               np.zeros(self.num_players + 1)
 
     def _state_transition(self, state, actions):
 
@@ -50,7 +87,6 @@ class BeerGame(MarkovGame):
     def render(self):
 
         if not self.rendered:
-
             # init the plot
             self.fig, self.ax = plt.subplots(figsize=(16, 8))
             plt.ion()
@@ -137,41 +173,3 @@ class BeerGame(MarkovGame):
         plt.pause(0.0001)
 
     plt.show()
-
-    def __init__(self, chain_length, intensity, cost_storage=0.5, cost_delay=1.0, process='poisson'):
-
-        super().__init__(chain_length)
-
-        # create consumer process
-        if process == 'poisson': self.consumer_process = PoissonProcess(intensity)
-        elif process == 'hawkes': self.hawkes_process = HawkesProcess(intensity)
-
-        self.cost_storage = cost_storage
-        self.cost_delay = cost_delay
-        self.last_cost = 0
-        self.rendered = False
-        self.costs = np.zeros(chain_length)
-
-        # calc some drawing related things
-        self.fig = None
-        self.ax = None
-
-        red = [111, 195]
-        green = [137, 225]
-        blue = [117, 169]
-        self.c_colors = create_gradient(self.num_players, red, green, blue)
-
-        self.gr = 1.64
-        self.gr = 1 / self.gr
-        h_marg_multiple = self.num_players
-
-        self.width = self.num_players + (self.num_players + 3) * self.gr + 2
-        self.height = 1 + 2 * h_marg_multiple * self.gr
-        self.gr_w = self.gr / self.width
-        self.gr_h = self.gr / self.height
-
-        self.left = np.arange(self.num_players + 2) * (1 / self.width + self.gr_w) + self.gr_w
-        self.bottom = self.num_players * self.gr_h
-        self.box_width = 1 / self.width
-        self.box_height = 1 / self.height
-        self.fs = 245 * self.box_height

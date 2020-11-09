@@ -11,12 +11,12 @@ class MLP(torch.nn.Module):
                      elu=torch.nn.ELU())
 
         self.nonlin = nlist[nonlin]
-        self.net = torch.nn.ModuleList([torch.nn.Linear(in_dim, hidden_size[0]),
-                                  self.nonlin])
+        self.net = torch.nn.ModuleList([torch.nn.Linear(in_dim, hidden_size[0]).double(),
+                                  self.nonlin.double()])
         if len(hidden_size) > 1:
             for i in range(len(hidden_size) - 1):
-                self.net.append(torch.nn.Linear(hidden_size[i], hidden_size[i + 1]))
-        self.out = torch.nn.Linear(hidden_size[-1], out_dim)
+                self.net.append(torch.nn.Linear(hidden_size[i], hidden_size[i + 1]).double())
+        self.out = torch.nn.Linear(hidden_size[-1], out_dim).double()
 
     def forward(self, x, **kwargs):
         for _, layer in enumerate(self.net):

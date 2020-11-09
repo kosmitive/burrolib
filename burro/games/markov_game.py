@@ -1,3 +1,7 @@
+import numpy as np
+from typing import List
+
+
 class MarkovGame:
 
     def __init__(self, num_players):
@@ -12,13 +16,13 @@ class MarkovGame:
         self.inner_state = self.reset()
         self.current_step = 0
 
-    def step(self, actions):
+    def step(self, actions: List[np.ndarray]):
         self.inner_state, rewards, done = self._state_transition(self.inner_state, actions)
         nxt_observations = self.get_observations()
         self.current_step += 1
         return nxt_observations, rewards, done
 
-    def observation_dim(self, i):
+    def observation_dim(self, i: int):
         raise NotImplementedError
 
     def _state_transition(self, state, actions):
