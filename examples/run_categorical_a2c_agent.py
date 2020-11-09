@@ -21,4 +21,4 @@ n_players = 4
 game = BeerGame(n_players, intensity=5.0)
 agent_factory = lambda i: deepcopy(cat_agent)
 
-run(game=game, agent_factory=agent_factory, n_players=n_players, n_steps=1000, render=False)
+run(game=game, agent_factory=agent_factory, n_players=n_players, n_steps=100000, render=False)

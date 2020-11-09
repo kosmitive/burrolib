@@ -18,7 +18,7 @@ class CategoricalAgent(Agent):
         self.gamma = gamma
         self.states_batch = torch.empty((self.batch_size, 3)).double()
         self.reward_batch = torch.zeros((self.batch_size, 1)).double()
-        self.oorders_batch = torch.empty((self.batch_size, 1)).double()
+        self.nxt_actions_batch = torch.empty((self.batch_size, 1)).double()
         self.batch_fill_count = 0
         self.vf_epochs = vf_epochs
         self.batch_filled = False
@@ -27,19 +27,16 @@ class CategoricalAgent(Agent):
         return CategoricalAgent(deepcopy(self.policy_model), gamma=self.gamma, batch_size=self.batch_size,
                                 vf_epochs=self.vf_epochs)
 
+    def _fill_batch(self, state, nxt_action, reward):
+        self.states_batch[self.batch_fill_count] = state
+        self.nxt_actions_batch[self.batch_fill_count] = nxt_action
+        self.reward_batch[self.batch_fill_count] = -reward
+
     def experience(self, state, action, reward, nxt_state, done):
-        new_oorders = self.policy_model.act(state)
-        self.oorders_batch[self.batch_fill_count] = torch.from_numpy(new_oorders)
-        self.states_batch[self.batch_fill_count] = torch.from_numpy(state)
-        # TODO: check costs
-        self.reward_batch[self.batch_fill_count] = state[2] - state[1]
+        nxt_action = self.policy_model.act(state)
+        self._fill_batch(torch.from_numpy(state), torch.from_numpy(nxt_action), -reward)
         self.batch_fill_count += 1
         if self.batch_fill_count >= self.batch_size:
-            discounted_reward = discount(self.reward_batch.numpy(), self.gamma)
-            discounted_reward = torch.cat([torch.tensor(dr) for dr in discounted_reward])
-            self.batch_fill_count = 0
-            self.update_vf(self.states_batch, discounted_reward)
-            self.advantage = (discounted_reward - self.policy_model.vf_net(self.states_batch)).detach()
             self.batch_filled = True
 
     def act(self, state):
@@ -50,12 +47,25 @@ class CategoricalAgent(Agent):
 
     def train(self):
         if self.batch_filled:
+            discounted_reward = discount(self.reward_batch.numpy(), self.gamma)
+            discounted_reward = torch.cat([torch.tensor(dr) for dr in discounted_reward])
+            # Train value function net
+            self.update_vf(self.states_batch, discounted_reward)
+
+            # Compute quantities for policy optimization
+            advantage = (discounted_reward - self.policy_model.vf_net(self.states_batch)).detach()
             logits = self.policy_model.policy_net(self.states_batch)
-            log_probs = torch.distributions.Categorical(logits=logits).log_prob(self.oorders_batch)
-            loss = - (self.advantage * log_probs).mean()
+            log_probs = torch.distributions.Categorical(logits=logits).log_prob(self.nxt_actions_batch)
+            loss = - (advantage * log_probs).mean()
+
+            # Update policy network
             self.policy_model.policy_optim.zero_grad()
             loss.backward()
             self.policy_model.policy_optim.step()
+
+            # Reset batch filled criterion
+            self.batch_filled = False
+            self.batch_fill_count = 0
 
     def update_vf(self, states, reward):
         loss_fn = torch.nn.MSELoss()

@@ -50,5 +50,5 @@ class HawkesProcess(DiscretePointProcess):
                 self.arrivals.append(t)
 
         self.arrivals = self.arrivals[i:]
-        print("hawkes generated ", i)
+        # print("hawkes generated ", i)
         return i

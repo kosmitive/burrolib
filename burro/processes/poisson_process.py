@@ -38,5 +38,5 @@ class PoissonProcess(DiscretePointProcess):
             # count up by one
             n += 1
 
-        print("poisson generated ", n)
+        # print("poisson generated ", n)
         return n
