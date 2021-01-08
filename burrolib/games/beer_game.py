@@ -1,22 +1,28 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
-from burrolib.processes.hawkes_process import HawkesProcess
+from burrolib.common.enums import Colors
 from burrolib.games.markov_game import MarkovGame
+from burrolib.processes.hawkes_process import HawkesProcess
 from burrolib.processes.poisson_process import PoissonProcess
 from burrolib.util.colors import create_gradient
-from burrolib.common.enums import Colors
 
 
 class BeerGame(MarkovGame):
-
-    def __init__(self, chain_length, intensity, cost_storage=0.5, cost_delay=1.0, process='poisson'):
+    def __init__(
+        self,
+        chain_length,
+        intensity,
+        cost_storage=0.5,
+        cost_delay=1.0,
+        process="poisson",
+    ):
         super().__init__(chain_length)
 
         # create consumer process
-        if process == 'poisson':
+        if process == "poisson":
             self.consumer_process = PoissonProcess(intensity)
-        elif process == 'hawkes':
+        elif process == "hawkes":
             self.hawkes_process = HawkesProcess(intensity)
 
         self.cost_storage = cost_storage
@@ -29,7 +35,9 @@ class BeerGame(MarkovGame):
         self.fig = None
         self.ax = None
 
-        self.c_colors = create_gradient(self.num_players, Colors.RED.value, Colors.GREEN.value, Colors.BLUE.value)
+        self.c_colors = create_gradient(
+            self.num_players, Colors.RED.value, Colors.GREEN.value, Colors.BLUE.value
+        )
 
         self.gr = 1.64
         self.gr = 1 / self.gr
@@ -40,7 +48,9 @@ class BeerGame(MarkovGame):
         self.gr_w = self.gr / self.width
         self.gr_h = self.gr / self.height
 
-        self.left = np.arange(self.num_players + 2) * (1 / self.width + self.gr_w) + self.gr_w
+        self.left = (
+            np.arange(self.num_players + 2) * (1 / self.width + self.gr_w) + self.gr_w
+        )
         self.bottom = self.num_players * self.gr_h
         self.box_width = 1 / self.width
         self.box_height = 1 / self.height
@@ -56,9 +66,11 @@ class BeerGame(MarkovGame):
 
     def _reset(self):
 
-        return np.zeros(self.num_players), \
-               np.zeros(self.num_players + 1), \
-               np.zeros(self.num_players + 1)
+        return (
+            np.zeros(self.num_players),
+            np.zeros(self.num_players + 1),
+            np.zeros(self.num_players + 1),
+        )
 
     def _state_transition(self, state, actions):
 
@@ -119,53 +131,124 @@ class BeerGame(MarkovGame):
             args = {}
             if 0 < k < N + 1:
                 if self.generated_delay_costs[k - 1] > 0:
-                    args['ec'] = 'darkred'
+                    args["ec"] = "darkred"
 
-            rect = plt.Rectangle((left[k], bottom), box_width, box_height, facecolor=self.c_colors[k], **args)
+            rect = plt.Rectangle(
+                (left[k], bottom),
+                box_width,
+                box_height,
+                facecolor=self.c_colors[k],
+                **args
+            )
             ax.add_patch(rect)
 
             if k < N + 1:
-                arrow_product = plt.Arrow(left[k + 1] - golden_ratio_w,
-                                          bottom + 2 * box_height / (2 + golden_ratio),
-                                          golden_ratio_w, 0, color="#000000", width=0.01)
+                arrow_product = plt.Arrow(
+                    left[k + 1] - golden_ratio_w,
+                    bottom + 2 * box_height / (2 + golden_ratio),
+                    golden_ratio_w,
+                    0,
+                    color="#000000",
+                    width=0.01,
+                )
                 ax.add_patch(arrow_product)
 
-                arrow_order = plt.Arrow(left[k + 1], bottom + box_height / (2 + golden_ratio), -golden_ratio_w, 0,
-                                        color="#555555", width=0.01)
+                arrow_order = plt.Arrow(
+                    left[k + 1],
+                    bottom + box_height / (2 + golden_ratio),
+                    -golden_ratio_w,
+                    0,
+                    color="#555555",
+                    width=0.01,
+                )
                 ax.add_patch(arrow_order)
-                plt.text(left[k] + box_width + box_width * 0.5 * golden_ratio, bottom + 1.5 * box_height,
-                         str(transported[k]),
-                         fontsize=fs * golden_ratio, ha='center', va='bottom')
+                plt.text(
+                    left[k] + box_width + box_width * 0.5 * golden_ratio,
+                    bottom + 1.5 * box_height,
+                    str(transported[k]),
+                    fontsize=fs * golden_ratio,
+                    ha="center",
+                    va="bottom",
+                )
 
-                plt.text(left[k] + box_width + box_width * 0.5 * golden_ratio, bottom - 0.5 * box_height,
-                         str(orders[k]),
-                         fontsize=fs * golden_ratio, ha='center', va='top')
+                plt.text(
+                    left[k] + box_width + box_width * 0.5 * golden_ratio,
+                    bottom - 0.5 * box_height,
+                    str(orders[k]),
+                    fontsize=fs * golden_ratio,
+                    ha="center",
+                    va="top",
+                )
 
             if k == 0:
-                plt.text(left[k] + 0.5 * box_width, 0.9, "Gen:",
-                         fontsize=fs * golden_ratio,
-                         color='black', ha='center', va='center')
-                plt.text(left[k] + 0.5 * box_width, 0.8, "Sum:", fontsize=fs * golden_ratio,
-                         color='black', ha='center', va='center')
-                plt.text(left[k] + 0.5 * box_width, bottom + 0.5 * box_height, "∞",
-                         fontsize=fs, ha='center', va='center')
+                plt.text(
+                    left[k] + 0.5 * box_width,
+                    0.9,
+                    "Gen:",
+                    fontsize=fs * golden_ratio,
+                    color="black",
+                    ha="center",
+                    va="center",
+                )
+                plt.text(
+                    left[k] + 0.5 * box_width,
+                    0.8,
+                    "Sum:",
+                    fontsize=fs * golden_ratio,
+                    color="black",
+                    ha="center",
+                    va="center",
+                )
+                plt.text(
+                    left[k] + 0.5 * box_width,
+                    bottom + 0.5 * box_height,
+                    "∞",
+                    fontsize=fs,
+                    ha="center",
+                    va="center",
+                )
 
             if 0 < k < N + 1:
-                plt.text(left[k] + 0.5 * box_width, bottom + 0.5 * box_height, str(supply[k - 1]),
-                         fontsize=fs, ha='center', va='center')
-                plt.text(left[k] + 0.5 * box_width, 0.9, str(self.generated_costs[k - 1]) + "€",
-                         fontsize=fs * golden_ratio,
-                         color='darkred', ha='center', va='center')
-                plt.text(left[k] + 0.5 * box_width, 0.8, str(self.costs[k - 1]) + "€", fontsize=fs * golden_ratio,
-                         color='darkred', ha='center', va='center')
+                plt.text(
+                    left[k] + 0.5 * box_width,
+                    bottom + 0.5 * box_height,
+                    str(supply[k - 1]),
+                    fontsize=fs,
+                    ha="center",
+                    va="center",
+                )
+                plt.text(
+                    left[k] + 0.5 * box_width,
+                    0.9,
+                    str(self.generated_costs[k - 1]) + "€",
+                    fontsize=fs * golden_ratio,
+                    color="darkred",
+                    ha="center",
+                    va="center",
+                )
+                plt.text(
+                    left[k] + 0.5 * box_width,
+                    0.8,
+                    str(self.costs[k - 1]) + "€",
+                    fontsize=fs * golden_ratio,
+                    color="darkred",
+                    ha="center",
+                    va="center",
+                )
 
         plt.title("SCM-SIM [" + str(self.current_step) + "]")
-        plt.text(0.5, 0.15,
-                 "Costs: " + str(np.sum(self.costs)) + "€",
-                 fontsize=fs, color='darkred', ha='center', va='center')
+        plt.text(
+            0.5,
+            0.15,
+            "Costs: " + str(np.sum(self.costs)) + "€",
+            fontsize=fs,
+            color="darkred",
+            ha="center",
+            va="center",
+        )
 
-        plt.axhline(y=0.7, linestyle='--', color='black')
-        plt.axhline(y=0.3, linestyle='--', color='black')
+        plt.axhline(y=0.7, linestyle="--", color="black")
+        plt.axhline(y=0.3, linestyle="--", color="black")
         plt.xlim([0, 1])
         plt.ylim([0, 1])
         plt.xticks([])

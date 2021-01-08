@@ -1,9 +1,9 @@
-import numpy as np
 from typing import List
+
+import numpy as np
 
 
 class MarkovGame:
-
     def __init__(self, num_players):
         """
 
@@ -17,7 +17,9 @@ class MarkovGame:
         self.current_step = 0
 
     def step(self, actions: List[np.ndarray]):
-        self.inner_state, rewards, done = self._state_transition(self.inner_state, actions)
+        self.inner_state, rewards, done = self._state_transition(
+            self.inner_state, actions
+        )
         nxt_observations = self.get_observations()
         self.current_step += 1
         return nxt_observations, rewards, done
@@ -42,4 +44,6 @@ class MarkovGame:
         return self.get_observations()
 
     def get_observations(self):
-        return [self._state_emission(self.inner_state, i) for i in range(self.num_players)]
+        return [
+            self._state_emission(self.inner_state, i) for i in range(self.num_players)
+        ]

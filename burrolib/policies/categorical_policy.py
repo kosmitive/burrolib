@@ -1,19 +1,27 @@
+from typing import Tuple
+
 import torch
 import torch.nn.functional as F
-from torch import distributions
-from torch import nn
-from typing import Tuple
+from torch import distributions, nn
 
 from burrolib.policies.base_policy import BasePolicyModel
 from burrolib.util.nn import MLP
 
 
 class GumbelPolicy(torch.nn.Module):
-
-    def __init__(self, in_dim: int, out_dim: int, hidden_size: Tuple[int] = (64, 64,), nonlin: str = 'relu'):
+    def __init__(
+        self,
+        in_dim: int,
+        out_dim: int,
+        hidden_size: Tuple[int] = (
+            64,
+            64,
+        ),
+        nonlin: str = "relu",
+    ):
         super(GumbelPolicy, self).__init__()
         self.net = MLP(in_dim, out_dim, hidden_size, nonlin)
-        self.temperature = nn.Parameter(torch.ones(1, 1)) # * torch.tensor(std).log())
+        self.temperature = nn.Parameter(torch.ones(1, 1))  # * torch.tensor(std).log())
 
     def forward(self, x):
         logits = self.net(x)
@@ -22,13 +30,32 @@ class GumbelPolicy(torch.nn.Module):
 
 
 class CategoricalPolicyModel(BasePolicyModel):
-
-    def __init__(self, io_order_dim: int = 3, max_order_size: int = 10, p_hidden_size: Tuple[int] = (64, 64,),
-                 vf_hidden_size: Tuple[int] = (64, 64,), p_lr: float = 1e-3, vf_lr: float = 1e-3):
+    def __init__(
+        self,
+        io_order_dim: int = 3,
+        max_order_size: int = 10,
+        p_hidden_size: Tuple[int] = (
+            64,
+            64,
+        ),
+        vf_hidden_size: Tuple[int] = (
+            64,
+            64,
+        ),
+        p_lr: float = 1e-3,
+        vf_lr: float = 1e-3,
+    ):
         super(CategoricalPolicyModel, self).__init__()
         self.max_order_size = max_order_size
-        self.policy_net = MLP(in_dim=io_order_dim, out_dim=max_order_size, hidden_size=p_hidden_size, nonlin='elu')
-        self.vf_net = MLP(in_dim=io_order_dim, out_dim=1, hidden_size=vf_hidden_size, nonlin='elu')
+        self.policy_net = MLP(
+            in_dim=io_order_dim,
+            out_dim=max_order_size,
+            hidden_size=p_hidden_size,
+            nonlin="elu",
+        )
+        self.vf_net = MLP(
+            in_dim=io_order_dim, out_dim=1, hidden_size=vf_hidden_size, nonlin="elu"
+        )
         self.policy_optim = torch.optim.Adam(self.policy_net.parameters(), lr=p_lr)
         self.vf_optim = torch.optim.Adam(self.vf_net.parameters(), lr=vf_lr)
 
@@ -60,10 +87,10 @@ class CategoricalPolicyModel(BasePolicyModel):
         return (y_hard - y).detach() + y
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     lol = CategoricalPolicyModel()
 
-    x = torch.tensor([5., 4., 2.])
+    x = torch.tensor([5.0, 4.0, 2.0])
 
     a = lol.act(x)
     print(a)
