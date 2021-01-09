@@ -1,7 +1,5 @@
 from distutils.core import setup
 
-import numpy as np
-
 with open("requirements.txt") as f:
     required = f.read().splitlines()
 
@@ -13,5 +11,4 @@ setup(
     author_email="kosmitive@gmail.com",
     install_requires=required,
     packages=["burrolib"],
-    include_dirs=[np.get_include()],
 )
