@@ -1,8 +1,5 @@
 # burrolib
 
-[![Build Status](https://travis-ci.org/kosmitive/burrolib.png?branch=master)](https://travis-ci.org/kosmitive/burrolib?branch=develop)
-[![Documentation Status](https://readthedocs.org/projects/burrolib/badge/?version=latest)](https://burrolib.readthedocs.io/en/latest/?badge=latest)
-
 This repository provides a small framework for multi-agent games released by xploras. The framework is designed 
 such that each participant in the chain can not see the full information but has access to previous and 
 following nodes.
