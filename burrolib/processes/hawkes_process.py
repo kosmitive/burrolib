@@ -7,6 +7,7 @@ from burrolib.util.type_checking import is_lambda
 class HawkesProcess(DiscretePointProcess):
 
     """Types of hawkes processes."""
+
     HOMOGENEOUS = 1
     INHOMOGENEOUS = 2
 
@@ -46,7 +47,8 @@ class HawkesProcess(DiscretePointProcess):
             u = np.random.uniform(0, m)
 
             if u < self.intensity(t):
-                if t < self.t: i += 1
+                if t < self.t:
+                    i += 1
                 self.arrivals.append(t)
 
         self.arrivals = self.arrivals[i:]

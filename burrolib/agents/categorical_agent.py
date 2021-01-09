@@ -1,6 +1,7 @@
+from copy import deepcopy
+
 import torch
 from torch import distributions
-from copy import deepcopy
 
 from burrolib.agents.agent import Agent
 from burrolib.policies.categorical_policy import CategoricalPolicyModel
@@ -8,9 +9,13 @@ from burrolib.util.calc import discount
 
 
 class CategoricalAgent(Agent):
-
-    def __init__(self, policy_model: CategoricalPolicyModel, gamma: float = 0.99,
-                 batch_size: int = 100, vf_epochs: int = 25):
+    def __init__(
+        self,
+        policy_model: CategoricalPolicyModel,
+        gamma: float = 0.99,
+        batch_size: int = 100,
+        vf_epochs: int = 25,
+    ):
         super(CategoricalAgent, self).__init__()
         self.policy_model = deepcopy(policy_model)
         self.max_order_size = self.policy_model.max_order_size
@@ -24,8 +29,12 @@ class CategoricalAgent(Agent):
         self.batch_filled = False
 
     def _clone(self):
-        return CategoricalAgent(deepcopy(self.policy_model), gamma=self.gamma, batch_size=self.batch_size,
-                                vf_epochs=self.vf_epochs)
+        return CategoricalAgent(
+            deepcopy(self.policy_model),
+            gamma=self.gamma,
+            batch_size=self.batch_size,
+            vf_epochs=self.vf_epochs,
+        )
 
     def _fill_batch(self, state, nxt_action, reward):
         self.states_batch[self.batch_fill_count] = state
@@ -48,15 +57,21 @@ class CategoricalAgent(Agent):
     def train(self):
         if self.batch_filled:
             discounted_reward = discount(self.reward_batch.numpy(), self.gamma)
-            discounted_reward = torch.cat([torch.tensor(dr) for dr in discounted_reward])
+            discounted_reward = torch.cat(
+                [torch.tensor(dr) for dr in discounted_reward]
+            )
             # Train value function net
             self.update_vf(self.states_batch, discounted_reward)
 
             # Compute quantities for policy optimization
-            advantage = (discounted_reward - self.policy_model.vf_net(self.states_batch)).detach()
+            advantage = (
+                discounted_reward - self.policy_model.vf_net(self.states_batch)
+            ).detach()
             logits = self.policy_model.policy_net(self.states_batch)
-            log_probs = torch.distributions.Categorical(logits=logits).log_prob(self.nxt_actions_batch)
-            loss = - (advantage * log_probs).mean()
+            log_probs = torch.distributions.Categorical(logits=logits).log_prob(
+                self.nxt_actions_batch
+            )
+            loss = -(advantage * log_probs).mean()
 
             # Update policy network
             self.policy_model.policy_optim.zero_grad()
