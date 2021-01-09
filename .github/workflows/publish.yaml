@@ -1,12 +1,9 @@
 name: publish-pypi
 
-on:
-  push:
-    branches:
-      - main
+on: [push]
 
 jobs:
-  build:
+  publish:
 
     runs-on: ubuntu-latest
 
