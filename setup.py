@@ -7,10 +7,10 @@ with open("requirements.txt") as f:
 
 setup(
     name="burrolib",
-    version="0.1.2",
-    description="burro - a supply chain simulator",
-    author="Markus Semmler, Thomas Lautenschlaeger",
-    author_email="dev@xploras.net",
+    version="0.1.3",
+    description="A multiagent toolkit",
+    author="xploras",
+    author_email="kosmitive@gmail.com",
     install_requires=required,
     packages=["burrolib"],
     include_dirs=[np.get_include()],
