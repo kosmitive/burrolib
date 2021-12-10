@@ -2,7 +2,7 @@
 
 This repository provides a small framework for multi-agent games released by xploras. The framework is designed 
 such that each participant in the chain can not see the full information but has access to previous and 
-following nodes.
+following nodes. This simulator represents an abstract view of supply chains and thus can be used to train models optimizing supply chain control.
 
 # Install library & necessary packages
 
